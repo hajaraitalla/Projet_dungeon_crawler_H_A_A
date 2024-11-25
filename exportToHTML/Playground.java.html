@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>Playground.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #7a7e85;}
+.s4 { color: #6aab73;}
+.s5 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Playground.java</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">imageio</span><span class="s2">.</span><span class="s1">ImageIO</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">awt</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">io</span><span class="s2">.</span><span class="s1">BufferedReader</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">io</span><span class="s2">.</span><span class="s1">File</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">io</span><span class="s2">.</span><span class="s1">FileReader</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">nio</span><span class="s2">.</span><span class="s1">charset</span><span class="s2">.</span><span class="s1">StandardCharsets</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">ArrayList</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">Playground </span><span class="s2">{</span>
+    <span class="s0">private </span><span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Sprite</span><span class="s2">&gt; </span><span class="s1">environment </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+
+    <span class="s0">public </span><span class="s1">Playground</span><span class="s2">(</span><span class="s1">String pathName</span><span class="s2">) {</span>
+        <span class="s0">try </span><span class="s2">{</span>
+            <span class="s3">// Charger les images</span>
+            <span class="s0">final </span><span class="s1">Image imageTree </span><span class="s2">= </span><span class="s1">ImageIO</span><span class="s2">.</span><span class="s1">read</span><span class="s2">(</span><span class="s0">new </span><span class="s1">File</span><span class="s2">(</span><span class="s4">&quot;./img/tree.png&quot;</span><span class="s2">));</span>
+            <span class="s0">final </span><span class="s1">Image imageGrass </span><span class="s2">= </span><span class="s1">ImageIO</span><span class="s2">.</span><span class="s1">read</span><span class="s2">(</span><span class="s0">new </span><span class="s1">File</span><span class="s2">(</span><span class="s4">&quot;./img/grass.png&quot;</span><span class="s2">));</span>
+            <span class="s0">final </span><span class="s1">Image imageRock </span><span class="s2">= </span><span class="s1">ImageIO</span><span class="s2">.</span><span class="s1">read</span><span class="s2">(</span><span class="s0">new </span><span class="s1">File</span><span class="s2">(</span><span class="s4">&quot;./img/rock.png&quot;</span><span class="s2">));</span>
+            <span class="s0">final </span><span class="s1">Image imageTrap </span><span class="s2">= </span><span class="s1">ImageIO</span><span class="s2">.</span><span class="s1">read</span><span class="s2">(</span><span class="s0">new </span><span class="s1">File</span><span class="s2">(</span><span class="s4">&quot;./img/trap.png&quot;</span><span class="s2">));</span>
+
+            <span class="s3">// Obtenir les dimensions des images</span>
+            <span class="s0">final int </span><span class="s1">imageTreeWidth </span><span class="s2">= </span><span class="s1">imageTree</span><span class="s2">.</span><span class="s1">getWidth</span><span class="s2">(</span><span class="s0">null</span><span class="s2">);</span>
+            <span class="s0">final int </span><span class="s1">imageTreeHeight </span><span class="s2">= </span><span class="s1">imageTree</span><span class="s2">.</span><span class="s1">getHeight</span><span class="s2">(</span><span class="s0">null</span><span class="s2">);</span>
+
+            <span class="s0">final int </span><span class="s1">imageGrassWidth </span><span class="s2">= </span><span class="s1">imageGrass</span><span class="s2">.</span><span class="s1">getWidth</span><span class="s2">(</span><span class="s0">null</span><span class="s2">);</span>
+            <span class="s0">final int </span><span class="s1">imageGrassHeight </span><span class="s2">= </span><span class="s1">imageGrass</span><span class="s2">.</span><span class="s1">getHeight</span><span class="s2">(</span><span class="s0">null</span><span class="s2">);</span>
+
+            <span class="s0">final int </span><span class="s1">imageRockWidth </span><span class="s2">= </span><span class="s1">imageRock</span><span class="s2">.</span><span class="s1">getWidth</span><span class="s2">(</span><span class="s0">null</span><span class="s2">);</span>
+            <span class="s0">final int </span><span class="s1">imageRockHeight </span><span class="s2">= </span><span class="s1">imageRock</span><span class="s2">.</span><span class="s1">getHeight</span><span class="s2">(</span><span class="s0">null</span><span class="s2">);</span>
+
+            <span class="s0">final int </span><span class="s1">imageTrapWidth </span><span class="s2">= </span><span class="s1">imageTrap</span><span class="s2">.</span><span class="s1">getWidth</span><span class="s2">(</span><span class="s0">null</span><span class="s2">);</span>
+            <span class="s0">final int </span><span class="s1">imageTrapHeight </span><span class="s2">= </span><span class="s1">imageTrap</span><span class="s2">.</span><span class="s1">getHeight</span><span class="s2">(</span><span class="s0">null</span><span class="s2">);</span>
+
+            <span class="s3">// Lire le fichier</span>
+            <span class="s0">try </span><span class="s2">(</span><span class="s1">BufferedReader bufferedReader </span><span class="s2">= </span><span class="s0">new </span><span class="s1">BufferedReader</span><span class="s2">(</span><span class="s0">new </span><span class="s1">FileReader</span><span class="s2">(</span><span class="s1">pathName</span><span class="s2">))) {</span>
+                <span class="s1">String line</span><span class="s2">;</span>
+                <span class="s0">int </span><span class="s1">lineNumber </span><span class="s2">= </span><span class="s5">0</span><span class="s2">;</span>
+                <span class="s0">int </span><span class="s1">columnNumber </span><span class="s2">= </span><span class="s5">0</span><span class="s2">;</span>
+
+                <span class="s3">// Lire ligne par ligne</span>
+                <span class="s0">while </span><span class="s2">((</span><span class="s1">line </span><span class="s2">= </span><span class="s1">bufferedReader</span><span class="s2">.</span><span class="s1">readLine</span><span class="s2">()) != </span><span class="s0">null</span><span class="s2">) {</span>
+                    <span class="s0">for </span><span class="s2">(</span><span class="s0">byte </span><span class="s1">element </span><span class="s2">: </span><span class="s1">line</span><span class="s2">.</span><span class="s1">getBytes</span><span class="s2">(</span><span class="s1">StandardCharsets</span><span class="s2">.</span><span class="s1">UTF_8</span><span class="s2">)) {</span>
+                        <span class="s3">// Ajouter des sprites en fonction du caractère</span>
+                        <span class="s0">switch </span><span class="s2">(</span><span class="s1">element</span><span class="s2">) {</span>
+                            <span class="s0">case </span><span class="s4">'T'</span><span class="s2">:</span>
+                                <span class="s1">environment</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">SolidSprite</span><span class="s2">(</span><span class="s1">columnNumber </span><span class="s2">* </span><span class="s1">imageTreeWidth</span><span class="s2">,</span>
+                                        <span class="s1">lineNumber </span><span class="s2">* </span><span class="s1">imageTreeHeight</span><span class="s2">, </span><span class="s1">imageTree</span><span class="s2">, </span><span class="s1">imageTreeWidth</span><span class="s2">, </span><span class="s1">imageTreeHeight</span><span class="s2">));</span>
+                                <span class="s0">break</span><span class="s2">;</span>
+                            <span class="s0">case </span><span class="s4">' '</span><span class="s2">:</span>
+                                <span class="s1">environment</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Sprite</span><span class="s2">(</span><span class="s1">columnNumber </span><span class="s2">* </span><span class="s1">imageGrassWidth</span><span class="s2">,</span>
+                                        <span class="s1">lineNumber </span><span class="s2">* </span><span class="s1">imageGrassHeight</span><span class="s2">, </span><span class="s1">imageGrass</span><span class="s2">, </span><span class="s1">imageGrassWidth</span><span class="s2">, </span><span class="s1">imageGrassHeight</span><span class="s2">));</span>
+                                <span class="s0">break</span><span class="s2">;</span>
+                            <span class="s0">case </span><span class="s4">'R'</span><span class="s2">:</span>
+                                <span class="s1">environment</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">SolidSprite</span><span class="s2">(</span><span class="s1">columnNumber </span><span class="s2">* </span><span class="s1">imageRockWidth</span><span class="s2">,</span>
+                                        <span class="s1">lineNumber </span><span class="s2">* </span><span class="s1">imageRockHeight</span><span class="s2">, </span><span class="s1">imageRock</span><span class="s2">, </span><span class="s1">imageRockWidth</span><span class="s2">, </span><span class="s1">imageRockHeight</span><span class="s2">));</span>
+                                <span class="s0">break</span><span class="s2">;</span>
+
+                            <span class="s0">case </span><span class="s4">'G'</span><span class="s2">:</span>
+                                <span class="s1">environment</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">SolidSprite</span><span class="s2">(</span><span class="s1">columnNumber </span><span class="s2">* </span><span class="s1">imageTrapWidth</span><span class="s2">,</span>
+                                        <span class="s1">lineNumber </span><span class="s2">* </span><span class="s1">imageTrapHeight</span><span class="s2">, </span><span class="s1">imageTrap</span><span class="s2">, </span><span class="s1">imageTrapWidth</span><span class="s2">, </span><span class="s1">imageTrapHeight</span><span class="s2">));</span>
+                                <span class="s0">break</span><span class="s2">;</span>
+
+                            <span class="s3">// Si vous souhaitez gérer d'autres cas, vous pouvez les ajouter ici</span>
+                        <span class="s2">}</span>
+                        <span class="s1">columnNumber</span><span class="s2">++;</span>
+                    <span class="s2">}</span>
+                    <span class="s1">columnNumber </span><span class="s2">= </span><span class="s5">0</span><span class="s2">;</span>
+                    <span class="s1">lineNumber</span><span class="s2">++;</span>
+                <span class="s2">}</span>
+            <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">Exception e</span><span class="s2">) {</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">err</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s4">&quot;Erreur lors de la lecture du fichier : &quot; </span><span class="s2">+ </span><span class="s1">pathName</span><span class="s2">);</span>
+                <span class="s1">e</span><span class="s2">.</span><span class="s1">printStackTrace</span><span class="s2">();</span>
+            <span class="s2">}</span>
+
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">Exception e</span><span class="s2">) {</span>
+            <span class="s1">e</span><span class="s2">.</span><span class="s1">printStackTrace</span><span class="s2">();</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Sprite</span><span class="s2">&gt; </span><span class="s1">getSolidSpriteList</span><span class="s2">() {</span>
+        <span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Sprite</span><span class="s2">&gt; </span><span class="s1">solidSpriteArrayList </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+        <span class="s0">for </span><span class="s2">(</span><span class="s1">Sprite sprite </span><span class="s2">: </span><span class="s1">environment</span><span class="s2">) {</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">sprite </span><span class="s0">instanceof </span><span class="s1">SolidSprite</span><span class="s2">) </span><span class="s1">solidSpriteArrayList</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">sprite</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s0">return </span><span class="s1">solidSpriteArrayList</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Displayable</span><span class="s2">&gt; </span><span class="s1">getSpriteList</span><span class="s2">() {</span>
+        <span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Displayable</span><span class="s2">&gt; </span><span class="s1">displayableArrayList </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+        <span class="s0">for </span><span class="s2">(</span><span class="s1">Sprite sprite </span><span class="s2">: </span><span class="s1">environment</span><span class="s2">) {</span>
+            <span class="s1">displayableArrayList</span><span class="s2">.</span><span class="s1">add</span><span class="s2">((</span><span class="s1">Displayable</span><span class="s2">) </span><span class="s1">sprite</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s0">return </span><span class="s1">displayableArrayList</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+<span class="s2">}</span></pre>
+</body>
+</html>

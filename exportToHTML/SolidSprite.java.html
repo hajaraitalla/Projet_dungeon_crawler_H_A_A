@@ -1,0 +1,34 @@
+<html>
+<head>
+<title>SolidSprite.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+SolidSprite.java</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">awt</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">awt</span><span class="s2">.</span><span class="s1">geom</span><span class="s2">.</span><span class="s1">Rectangle2D</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">SolidSprite </span><span class="s0">extends </span><span class="s1">Sprite</span><span class="s2">{</span>
+    <span class="s0">public </span><span class="s1">SolidSprite</span><span class="s2">(</span><span class="s0">double </span><span class="s1">x</span><span class="s2">, </span><span class="s0">double </span><span class="s1">y</span><span class="s2">, </span><span class="s1">Image image</span><span class="s2">, </span><span class="s0">double </span><span class="s1">width</span><span class="s2">, </span><span class="s0">double </span><span class="s1">height</span><span class="s2">) {</span>
+        <span class="s0">super</span><span class="s2">(</span><span class="s1">x</span><span class="s2">, </span><span class="s1">y</span><span class="s2">, </span><span class="s1">image</span><span class="s2">, </span><span class="s1">width</span><span class="s2">, </span><span class="s1">height</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">Rectangle2D getHitBox</span><span class="s2">() {</span>
+        <span class="s0">return new </span><span class="s1">Rectangle2D</span><span class="s2">.</span><span class="s1">Double</span><span class="s2">(</span><span class="s1">x</span><span class="s2">,</span><span class="s1">y</span><span class="s2">,(</span><span class="s0">double</span><span class="s2">) </span><span class="s1">width</span><span class="s2">,(</span><span class="s0">double</span><span class="s2">) </span><span class="s1">height</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public boolean </span><span class="s1">intersect</span><span class="s2">(</span><span class="s1">Rectangle2D</span><span class="s2">.</span><span class="s1">Double hitBox</span><span class="s2">){</span>
+        <span class="s0">return this</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">intersects</span><span class="s2">(</span><span class="s1">hitBox</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>

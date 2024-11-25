@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>Main.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+.s5 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Main.java</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">imageio</span><span class="s2">.</span><span class="s1">ImageIO</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">swing</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">io</span><span class="s2">.</span><span class="s1">File</span><span class="s2">;</span>
+
+<span class="s0">import static </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">swing</span><span class="s2">.</span><span class="s1">WindowConstants</span><span class="s2">.</span><span class="s1">EXIT_ON_CLOSE</span><span class="s2">;</span>
+
+<span class="s0">public class  </span><span class="s1">Main </span><span class="s2">{</span>
+
+    <span class="s1">JFrame displayZoneFrame</span><span class="s2">;</span>
+
+    <span class="s1">RenderEngine renderEngine</span><span class="s2">;</span>
+    <span class="s1">GameEngine gameEngine</span><span class="s2">;</span>
+    <span class="s1">PhysicEngine physicEngine</span><span class="s2">;</span>
+
+    <span class="s0">public </span><span class="s1">Main</span><span class="s2">() </span><span class="s0">throws </span><span class="s1">Exception</span><span class="s2">{</span>
+        <span class="s1">displayZoneFrame </span><span class="s2">= </span><span class="s0">new </span><span class="s1">JFrame</span><span class="s2">(</span><span class="s3">&quot;Java Labs&quot;</span><span class="s2">);</span>
+        <span class="s1">displayZoneFrame</span><span class="s2">.</span><span class="s1">setSize</span><span class="s2">(</span><span class="s4">2000</span><span class="s2">,</span><span class="s4">1200</span><span class="s2">);</span>
+        <span class="s1">displayZoneFrame</span><span class="s2">.</span><span class="s1">setDefaultCloseOperation</span><span class="s2">(</span><span class="s1">EXIT_ON_CLOSE</span><span class="s2">);</span>
+
+        <span class="s1">DynamicSprite hero </span><span class="s2">= </span><span class="s0">new </span><span class="s1">DynamicSprite</span><span class="s2">(</span><span class="s4">200</span><span class="s2">,</span><span class="s4">300</span><span class="s2">,</span>
+                <span class="s1">ImageIO</span><span class="s2">.</span><span class="s1">read</span><span class="s2">(</span><span class="s0">new </span><span class="s1">File</span><span class="s2">(</span><span class="s3">&quot;./img/heroTileSheetLowRes.png&quot;</span><span class="s2">)),</span><span class="s4">48</span><span class="s2">,</span><span class="s4">50</span><span class="s2">);</span>
+
+
+        <span class="s1">renderEngine </span><span class="s2">= </span><span class="s0">new </span><span class="s1">RenderEngine</span><span class="s2">(</span><span class="s1">displayZoneFrame</span><span class="s2">);</span>
+        <span class="s1">physicEngine </span><span class="s2">= </span><span class="s0">new </span><span class="s1">PhysicEngine</span><span class="s2">();</span>
+        <span class="s1">gameEngine </span><span class="s2">= </span><span class="s0">new </span><span class="s1">GameEngine</span><span class="s2">(</span><span class="s1">hero</span><span class="s2">);</span>
+
+
+        <span class="s1">Timer renderTimer </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Timer</span><span class="s2">(</span><span class="s4">50</span><span class="s2">,(</span><span class="s1">time</span><span class="s2">)</span><span class="s1">-&gt; renderEngine</span><span class="s2">.</span><span class="s1">update</span><span class="s2">());</span>
+        <span class="s1">Timer gameTimer </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Timer</span><span class="s2">(</span><span class="s4">50</span><span class="s2">,(</span><span class="s1">time</span><span class="s2">)</span><span class="s1">-&gt; gameEngine</span><span class="s2">.</span><span class="s1">update</span><span class="s2">());</span>
+        <span class="s1">Timer physicTimer </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Timer</span><span class="s2">(</span><span class="s4">50</span><span class="s2">,(</span><span class="s1">time</span><span class="s2">)</span><span class="s1">-&gt; physicEngine</span><span class="s2">.</span><span class="s1">update</span><span class="s2">());</span>
+
+        <span class="s1">renderTimer</span><span class="s2">.</span><span class="s1">start</span><span class="s2">();</span>
+        <span class="s1">gameTimer</span><span class="s2">.</span><span class="s1">start</span><span class="s2">();</span>
+        <span class="s1">physicTimer</span><span class="s2">.</span><span class="s1">start</span><span class="s2">();</span>
+
+        <span class="s1">displayZoneFrame</span><span class="s2">.</span><span class="s1">getContentPane</span><span class="s2">().</span><span class="s1">add</span><span class="s2">(</span><span class="s1">renderEngine</span><span class="s2">);</span>
+        <span class="s1">displayZoneFrame</span><span class="s2">.</span><span class="s1">setVisible</span><span class="s2">(</span><span class="s0">true</span><span class="s2">);</span>
+
+        <span class="s1">Playground level </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Playground</span><span class="s2">(</span><span class="s3">&quot;./data/level1.txt&quot;</span><span class="s2">);</span>
+        <span class="s5">//SolidSprite testSprite = new DynamicSprite(100,100,test,0,0);</span>
+        <span class="s1">renderEngine</span><span class="s2">.</span><span class="s1">addToRenderList</span><span class="s2">(</span><span class="s1">level</span><span class="s2">.</span><span class="s1">getSpriteList</span><span class="s2">());</span>
+        <span class="s1">renderEngine</span><span class="s2">.</span><span class="s1">addToRenderList</span><span class="s2">(</span><span class="s1">hero</span><span class="s2">);</span>
+        <span class="s1">physicEngine</span><span class="s2">.</span><span class="s1">addToMovingSpriteList</span><span class="s2">(</span><span class="s1">hero</span><span class="s2">);</span>
+        <span class="s1">physicEngine</span><span class="s2">.</span><span class="s1">setEnvironment</span><span class="s2">(</span><span class="s1">level</span><span class="s2">.</span><span class="s1">getSolidSpriteList</span><span class="s2">());</span>
+
+        <span class="s1">displayZoneFrame</span><span class="s2">.</span><span class="s1">addKeyListener</span><span class="s2">(</span><span class="s1">gameEngine</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public static void </span><span class="s1">main </span><span class="s2">(</span><span class="s1">String</span><span class="s2">[] </span><span class="s1">args</span><span class="s2">) </span><span class="s0">throws </span><span class="s1">Exception </span><span class="s2">{</span>
+        <span class="s5">// write your code here</span>
+        <span class="s1">Main main </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Main</span><span class="s2">();</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>

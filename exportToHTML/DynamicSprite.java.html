@@ -1,0 +1,147 @@
+<html>
+<head>
+<title>DynamicSprite.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #2aacb8;}
+.s4 { color: #7a7e85;}
+.s5 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+DynamicSprite.java</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">awt</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">awt</span><span class="s2">.</span><span class="s1">geom</span><span class="s2">.</span><span class="s1">Rectangle2D</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">ArrayList</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">DynamicSprite </span><span class="s0">extends </span><span class="s1">SolidSprite </span><span class="s2">{</span>
+    <span class="s0">private </span><span class="s1">Direction direction </span><span class="s2">= </span><span class="s1">Direction</span><span class="s2">.</span><span class="s1">EAST</span><span class="s2">;</span>
+    <span class="s0">private double </span><span class="s1">speed </span><span class="s2">= </span><span class="s3">5</span><span class="s2">;</span>
+    <span class="s0">private double </span><span class="s1">timeBetweenFrame </span><span class="s2">= </span><span class="s3">250</span><span class="s2">;</span>
+    <span class="s0">private boolean </span><span class="s1">isWalking </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+    <span class="s0">private final int </span><span class="s1">spriteSheetNumberOfColumn </span><span class="s2">= </span><span class="s3">10</span><span class="s2">;</span>
+
+    <span class="s4">// New attributes for running capability</span>
+    <span class="s0">private double </span><span class="s1">normalSpeed </span><span class="s2">= </span><span class="s3">5</span><span class="s2">; </span><span class="s4">// Normal speed</span>
+    <span class="s0">private double </span><span class="s1">runningSpeed </span><span class="s2">= </span><span class="s3">10</span><span class="s2">; </span><span class="s4">// Running speed</span>
+    <span class="s0">private boolean </span><span class="s1">isRunning </span><span class="s2">= </span><span class="s0">false</span><span class="s2">; </span><span class="s4">// Indicates if the hero is running</span>
+
+    <span class="s4">// Health attributes</span>
+    <span class="s0">private double </span><span class="s1">health </span><span class="s2">= </span><span class="s3">100.0</span><span class="s2">; </span><span class="s4">// Hero's health (start at 100%)</span>
+    <span class="s0">private final double </span><span class="s1">healthDecrementAmount </span><span class="s2">= </span><span class="s3">1.0</span><span class="s2">; </span><span class="s4">// Decrease health by 1% of the original</span>
+    <span class="s0">private boolean </span><span class="s1">isGameOver </span><span class="s2">= </span><span class="s0">false</span><span class="s2">; </span><span class="s4">// To track game over state</span>
+
+    <span class="s0">public </span><span class="s1">DynamicSprite</span><span class="s2">(</span><span class="s0">double </span><span class="s1">x</span><span class="s2">, </span><span class="s0">double </span><span class="s1">y</span><span class="s2">, </span><span class="s1">Image image</span><span class="s2">, </span><span class="s0">double </span><span class="s1">width</span><span class="s2">, </span><span class="s0">double </span><span class="s1">height</span><span class="s2">) {</span>
+        <span class="s0">super</span><span class="s2">(</span><span class="s1">x</span><span class="s2">, </span><span class="s1">y</span><span class="s2">, </span><span class="s1">image</span><span class="s2">, </span><span class="s1">width</span><span class="s2">, </span><span class="s1">height</span><span class="s2">);</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">speed </span><span class="s2">= </span><span class="s1">normalSpeed</span><span class="s2">; </span><span class="s4">// Initialize speed to normal speed</span>
+    <span class="s2">}</span>
+
+    <span class="s4">// Method to toggle running state</span>
+    <span class="s0">public void </span><span class="s1">setRunning</span><span class="s2">(</span><span class="s0">boolean </span><span class="s1">running</span><span class="s2">) {</span>
+        <span class="s1">isRunning </span><span class="s2">= </span><span class="s1">running</span><span class="s2">;</span>
+        <span class="s1">speed </span><span class="s2">= </span><span class="s1">isRunning </span><span class="s2">? </span><span class="s1">runningSpeed </span><span class="s2">: </span><span class="s1">normalSpeed</span><span class="s2">; </span><span class="s4">// Update speed based on running state</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private boolean </span><span class="s1">isMovingPossible</span><span class="s2">(</span><span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Sprite</span><span class="s2">&gt; </span><span class="s1">environment</span><span class="s2">) {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">isGameOver</span><span class="s2">) {</span>
+            <span class="s0">return false</span><span class="s2">; </span><span class="s4">// Prevent movement if game is over</span>
+        <span class="s2">}</span>
+
+        <span class="s1">Rectangle2D</span><span class="s2">.</span><span class="s1">Double moved </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Rectangle2D</span><span class="s2">.</span><span class="s1">Double</span><span class="s2">();</span>
+        <span class="s0">switch </span><span class="s2">(</span><span class="s1">direction</span><span class="s2">) {</span>
+            <span class="s0">case </span><span class="s1">EAST</span><span class="s2">:</span>
+                <span class="s1">moved</span><span class="s2">.</span><span class="s1">setRect</span><span class="s2">(</span><span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getX</span><span class="s2">() + </span><span class="s1">speed</span><span class="s2">, </span><span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getY</span><span class="s2">(),</span>
+                        <span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getWidth</span><span class="s2">(), </span><span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getHeight</span><span class="s2">());</span>
+                <span class="s0">break</span><span class="s2">;</span>
+            <span class="s0">case </span><span class="s1">WEST</span><span class="s2">:</span>
+                <span class="s1">moved</span><span class="s2">.</span><span class="s1">setRect</span><span class="s2">(</span><span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getX</span><span class="s2">() - </span><span class="s1">speed</span><span class="s2">, </span><span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getY</span><span class="s2">(),</span>
+                        <span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getWidth</span><span class="s2">(), </span><span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getHeight</span><span class="s2">());</span>
+                <span class="s0">break</span><span class="s2">;</span>
+            <span class="s0">case </span><span class="s1">NORTH</span><span class="s2">:</span>
+                <span class="s1">moved</span><span class="s2">.</span><span class="s1">setRect</span><span class="s2">(</span><span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getX</span><span class="s2">(), </span><span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getY</span><span class="s2">() - </span><span class="s1">speed</span><span class="s2">,</span>
+                        <span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getWidth</span><span class="s2">(), </span><span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getHeight</span><span class="s2">());</span>
+                <span class="s0">break</span><span class="s2">;</span>
+            <span class="s0">case </span><span class="s1">SOUTH</span><span class="s2">:</span>
+                <span class="s1">moved</span><span class="s2">.</span><span class="s1">setRect</span><span class="s2">(</span><span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getX</span><span class="s2">(), </span><span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getY</span><span class="s2">() + </span><span class="s1">speed</span><span class="s2">,</span>
+                        <span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getWidth</span><span class="s2">(), </span><span class="s0">super</span><span class="s2">.</span><span class="s1">getHitBox</span><span class="s2">().</span><span class="s1">getHeight</span><span class="s2">());</span>
+                <span class="s0">break</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s0">for </span><span class="s2">(</span><span class="s1">Sprite s </span><span class="s2">: </span><span class="s1">environment</span><span class="s2">) {</span>
+            <span class="s0">if </span><span class="s2">((</span><span class="s1">s </span><span class="s0">instanceof </span><span class="s1">SolidSprite</span><span class="s2">) &amp;&amp; (</span><span class="s1">s </span><span class="s2">!= </span><span class="s0">this</span><span class="s2">)) {</span>
+                <span class="s0">if </span><span class="s2">(((</span><span class="s1">SolidSprite</span><span class="s2">) </span><span class="s1">s</span><span class="s2">).</span><span class="s1">intersect</span><span class="s2">(</span><span class="s1">moved</span><span class="s2">)) {</span>
+                    <span class="s1">reduceHealth</span><span class="s2">(); </span><span class="s4">// Reduce health on collision</span>
+                    <span class="s0">if </span><span class="s2">(</span><span class="s1">isGameOver</span><span class="s2">) {</span>
+                        <span class="s0">return false</span><span class="s2">; </span><span class="s4">// Prevent further movement if game is over</span>
+                    <span class="s2">}</span>
+                    <span class="s0">return false</span><span class="s2">;</span>
+                <span class="s2">}</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+        <span class="s0">return true</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s4">// Method to reduce health by a fixed 1% of the original (100) each time</span>
+    <span class="s0">private void </span><span class="s1">reduceHealth</span><span class="s2">() {</span>
+        <span class="s1">health </span><span class="s2">-= </span><span class="s1">healthDecrementAmount</span><span class="s2">; </span><span class="s4">// Decreases health by 1%</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">health </span><span class="s2">&lt; </span><span class="s3">0</span><span class="s2">) </span><span class="s1">health </span><span class="s2">= </span><span class="s3">0</span><span class="s2">; </span><span class="s4">// Ensure health doesn't go below 0</span>
+
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">health </span><span class="s2">== </span><span class="s3">0</span><span class="s2">) {</span>
+            <span class="s1">isGameOver </span><span class="s2">= </span><span class="s0">true</span><span class="s2">; </span><span class="s4">// Set game over flag when health reaches 0</span>
+        <span class="s2">}</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s5">&quot;Health: &quot; </span><span class="s2">+ </span><span class="s1">health </span><span class="s2">+ </span><span class="s5">&quot;%&quot;</span><span class="s2">); </span><span class="s4">// For debugging</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setDirection</span><span class="s2">(</span><span class="s1">Direction direction</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">direction </span><span class="s2">= </span><span class="s1">direction</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">move</span><span class="s2">() {</span>
+        <span class="s0">switch </span><span class="s2">(</span><span class="s1">direction</span><span class="s2">) {</span>
+            <span class="s0">case </span><span class="s1">NORTH -&gt; </span><span class="s0">this</span><span class="s2">.</span><span class="s1">y </span><span class="s2">-= </span><span class="s1">speed</span><span class="s2">;</span>
+            <span class="s0">case </span><span class="s1">SOUTH -&gt; </span><span class="s0">this</span><span class="s2">.</span><span class="s1">y </span><span class="s2">+= </span><span class="s1">speed</span><span class="s2">;</span>
+            <span class="s0">case </span><span class="s1">EAST -&gt; </span><span class="s0">this</span><span class="s2">.</span><span class="s1">x </span><span class="s2">+= </span><span class="s1">speed</span><span class="s2">;</span>
+            <span class="s0">case </span><span class="s1">WEST -&gt; </span><span class="s0">this</span><span class="s2">.</span><span class="s1">x </span><span class="s2">-= </span><span class="s1">speed</span><span class="s2">;</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">moveIfPossible</span><span class="s2">(</span><span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Sprite</span><span class="s2">&gt; </span><span class="s1">environment</span><span class="s2">) {</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">isGameOver </span><span class="s2">&amp;&amp; </span><span class="s1">isMovingPossible</span><span class="s2">(</span><span class="s1">environment</span><span class="s2">)) {</span>
+            <span class="s1">move</span><span class="s2">();</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">draw</span><span class="s2">(</span><span class="s1">Graphics g</span><span class="s2">) {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">isGameOver</span><span class="s2">) {</span>
+            <span class="s4">// Draw game over text, further left</span>
+            <span class="s1">g</span><span class="s2">.</span><span class="s1">setColor</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">RED</span><span class="s2">);</span>
+            <span class="s1">g</span><span class="s2">.</span><span class="s1">setFont</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Font</span><span class="s2">(</span><span class="s5">&quot;Arial&quot;</span><span class="s2">, </span><span class="s1">Font</span><span class="s2">.</span><span class="s1">BOLD</span><span class="s2">, </span><span class="s3">50</span><span class="s2">));</span>
+            <span class="s1">g</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;GAME OVER&quot;</span><span class="s2">, </span><span class="s3">500</span><span class="s2">, </span><span class="s3">400</span><span class="s2">);  </span><span class="s4">// Further left adjustment</span>
+            <span class="s0">return</span><span class="s2">; </span><span class="s4">// Do not draw the sprite if the game is over</span>
+        <span class="s2">}</span>
+
+        <span class="s0">int </span><span class="s1">index </span><span class="s2">= (</span><span class="s0">int</span><span class="s2">) (</span><span class="s1">System</span><span class="s2">.</span><span class="s1">currentTimeMillis</span><span class="s2">() / </span><span class="s1">timeBetweenFrame </span><span class="s2">% </span><span class="s1">spriteSheetNumberOfColumn</span><span class="s2">);</span>
+
+        <span class="s1">g</span><span class="s2">.</span><span class="s1">drawImage</span><span class="s2">(</span><span class="s1">image</span><span class="s2">, (</span><span class="s0">int</span><span class="s2">) </span><span class="s1">x</span><span class="s2">, (</span><span class="s0">int</span><span class="s2">) </span><span class="s1">y</span><span class="s2">, (</span><span class="s0">int</span><span class="s2">) (</span><span class="s1">x </span><span class="s2">+ </span><span class="s1">width</span><span class="s2">), (</span><span class="s0">int</span><span class="s2">) (</span><span class="s1">y </span><span class="s2">+ </span><span class="s1">height</span><span class="s2">),</span>
+                <span class="s2">(</span><span class="s0">int</span><span class="s2">) (</span><span class="s1">index </span><span class="s2">* </span><span class="s0">this</span><span class="s2">.</span><span class="s1">width</span><span class="s2">), (</span><span class="s0">int</span><span class="s2">) (</span><span class="s1">direction</span><span class="s2">.</span><span class="s1">getFrameLineNumber</span><span class="s2">() * </span><span class="s1">height</span><span class="s2">),</span>
+                <span class="s2">(</span><span class="s0">int</span><span class="s2">) ((</span><span class="s1">index </span><span class="s2">+ </span><span class="s3">1</span><span class="s2">) * </span><span class="s0">this</span><span class="s2">.</span><span class="s1">width</span><span class="s2">), (</span><span class="s0">int</span><span class="s2">) ((</span><span class="s1">direction</span><span class="s2">.</span><span class="s1">getFrameLineNumber</span><span class="s2">() + </span><span class="s3">1</span><span class="s2">) * </span><span class="s0">this</span><span class="s2">.</span><span class="s1">height</span><span class="s2">), </span><span class="s0">null</span><span class="s2">);</span>
+
+        <span class="s4">// Draw health bar</span>
+        <span class="s1">g</span><span class="s2">.</span><span class="s1">setColor</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">RED</span><span class="s2">);</span>
+        <span class="s1">g</span><span class="s2">.</span><span class="s1">fillRect</span><span class="s2">((</span><span class="s0">int</span><span class="s2">) </span><span class="s1">x</span><span class="s2">, (</span><span class="s0">int</span><span class="s2">) </span><span class="s1">y </span><span class="s2">- </span><span class="s3">10</span><span class="s2">, (</span><span class="s0">int</span><span class="s2">) (</span><span class="s1">width </span><span class="s2">* (</span><span class="s1">health </span><span class="s2">/ </span><span class="s3">100</span><span class="s2">)), </span><span class="s3">5</span><span class="s2">);</span>
+        <span class="s1">g</span><span class="s2">.</span><span class="s1">setColor</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">BLACK</span><span class="s2">);</span>
+        <span class="s1">g</span><span class="s2">.</span><span class="s1">drawRect</span><span class="s2">((</span><span class="s0">int</span><span class="s2">) </span><span class="s1">x</span><span class="s2">, (</span><span class="s0">int</span><span class="s2">) </span><span class="s1">y </span><span class="s2">- </span><span class="s3">10</span><span class="s2">, (</span><span class="s0">int</span><span class="s2">) </span><span class="s1">width</span><span class="s2">,</span><span class="s3">5</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+<span class="s2">}</span></pre>
+</body>
+</html>
