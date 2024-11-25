@@ -38,7 +38,6 @@ public class  Main {
         displayZoneFrame.setVisible(true);
 
         Playground level = new Playground("./data/level1.txt");
-        //SolidSprite testSprite = new DynamicSprite(100,100,test,0,0);
         renderEngine.addToRenderList(level.getSpriteList());
         renderEngine.addToRenderList(hero);
         physicEngine.addToMovingSpriteList(hero);
