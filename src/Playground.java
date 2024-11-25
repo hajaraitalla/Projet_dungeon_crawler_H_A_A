@@ -11,13 +11,11 @@ public class Playground {
 
     public Playground(String pathName) {
         try {
-            // Charger les images
             final Image imageTree = ImageIO.read(new File("./img/tree.png"));
             final Image imageGrass = ImageIO.read(new File("./img/grass.png"));
             final Image imageRock = ImageIO.read(new File("./img/rock.png"));
             final Image imageTrap = ImageIO.read(new File("./img/trap.png"));
 
-            // Obtenir les dimensions des images
             final int imageTreeWidth = imageTree.getWidth(null);
             final int imageTreeHeight = imageTree.getHeight(null);
 
@@ -30,13 +28,11 @@ public class Playground {
             final int imageTrapWidth = imageTrap.getWidth(null);
             final int imageTrapHeight = imageTrap.getHeight(null);
 
-            // Lire le fichier
             try (BufferedReader bufferedReader = new BufferedReader(new FileReader(pathName))) {
                 String line;
                 int lineNumber = 0;
                 int columnNumber = 0;
 
-                // Lire ligne par ligne
                 while ((line = bufferedReader.readLine()) != null) {
                     for (byte element : line.getBytes(StandardCharsets.UTF_8)) {
                         // Ajouter des sprites en fonction du caractère
@@ -59,7 +55,7 @@ public class Playground {
                                         lineNumber * imageTrapHeight, imageTrap, imageTrapWidth, imageTrapHeight));
                                 break;
 
-                            // Si vous souhaitez gérer d'autres cas, vous pouvez les ajouter ici
+                        
                         }
                         columnNumber++;
                     }
