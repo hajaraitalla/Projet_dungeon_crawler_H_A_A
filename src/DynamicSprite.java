@@ -9,25 +9,21 @@ public class DynamicSprite extends SolidSprite {
     private boolean isWalking = true;
     private final int spriteSheetNumberOfColumn = 10;
 
-    // New attributes for running capability
-    private double normalSpeed = 5; // Normal speed
-    private double runningSpeed = 10; // Running speed
-    private boolean isRunning = false; // Indicates if the hero is running
+    private double normalSpeed = 5; 
+    private double runningSpeed = 10; 
+    private boolean isRunning = false;
 
-    // Health attributes
-    private double health = 100.0; // Hero's health (start at 100%)
-    private final double healthDecrementAmount = 1.0; // Decrease health by 1% of the original
-    private boolean isGameOver = false; // To track game over state
-
+    private double health = 100.0; 
+    private final double healthDecrementAmount = 1.0; 
+    private boolean isGameOver = false;
     public DynamicSprite(double x, double y, Image image, double width, double height) {
         super(x, y, image, width, height);
-        this.speed = normalSpeed; // Initialize speed to normal speed
+        this.speed = normalSpeed; 
     }
 
-    // Method to toggle running state
     public void setRunning(boolean running) {
         isRunning = running;
-        speed = isRunning ? runningSpeed : normalSpeed; // Update speed based on running state
+        speed = isRunning ? runningSpeed : normalSpeed; 
     }
 
     private boolean isMovingPossible(ArrayList<Sprite> environment) {
@@ -69,16 +65,15 @@ public class DynamicSprite extends SolidSprite {
         return true;
     }
 
-    // Method to reduce health by a fixed 1% of the original (100) each time
     private void reduceHealth() {
-        health -= healthDecrementAmount; // Decreases health by 1%
-        if (health < 0) health = 0; // Ensure health doesn't go below 0
+        health -= healthDecrementAmount; 
+        if (health < 0) health = 0; 
 
         if (health == 0) {
             isGameOver = true; // Set game over flag when health reaches 0
         }
 
-        System.out.println("Health: " + health + "%"); // For debugging
+        System.out.println("Health: " + health + "%"); 
     }
 
     public void setDirection(Direction direction) {
@@ -106,7 +101,7 @@ public class DynamicSprite extends SolidSprite {
             // Draw game over text, further left
             g.setColor(Color.RED);
             g.setFont(new Font("Arial", Font.BOLD, 50));
-            g.drawString("GAME OVER", 500, 400);  // Further left adjustment
+            g.drawString("GAME OVER", 500, 400);  
             return; // Do not draw the sprite if the game is over
         }
 
@@ -116,7 +111,6 @@ public class DynamicSprite extends SolidSprite {
                 (int) (index * this.width), (int) (direction.getFrameLineNumber() * height),
                 (int) ((index + 1) * this.width), (int) ((direction.getFrameLineNumber() + 1) * this.height), null);
 
-        // Draw health bar
         g.setColor(Color.RED);
         g.fillRect((int) x, (int) y - 10, (int) (width * (health / 100)), 5);
         g.setColor(Color.BLACK);
